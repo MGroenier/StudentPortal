@@ -1,5 +1,6 @@
 package com.lastdown.student_portal.studentportal;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -56,8 +57,8 @@ public class OverviewActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(view.getContext(),AddPortal.class);
+                startActivityForResult(intent,1234);
             }
         });
     }
@@ -83,4 +84,26 @@ public class OverviewActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (resultCode == Activity.RESULT_OK) {
+
+            //Checks if the requestCode is correct
+            if (requestCode == 1234) {
+                //Gets the values
+                String url = data.getStringExtra("url");
+                String title = data.getStringExtra("title");
+
+                //Add the values to the list
+                items.add(new ListItem(title,url));
+
+                //Refresh the listView
+                adapter.notifyDataSetChanged();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
 }
